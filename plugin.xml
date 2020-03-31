@@ -105,6 +105,8 @@
     <source-file src="src/ios/AppDelegate+FirebasePlugin.m" />
     <header-file src="src/ios/FirebasePlugin.h" />
     <source-file src="src/ios/FirebasePlugin.m" />
+    
+    <dependency id="cocoapods-generate" url="https://github.com/square/cocoapods-generate"/>
 
 <!--
     <framework src="Fabric" type="podspec" spec="~> 1.9" />
