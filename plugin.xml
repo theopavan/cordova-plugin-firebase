@@ -106,7 +106,7 @@
     <header-file src="src/ios/FirebasePlugin.h" />
     <source-file src="src/ios/FirebasePlugin.m" />
     
-    <dependency id="cordova-plugin-cocoapod-support" url="https://github.com/blakgeek/cordova-plugin-cocoapods-support.git" version="1.6.2"/>
+    <dependency id="cordova-plugin-cocoapod-support" url="https://github.com/blakgeek/cordova-plugin-cocoapods-support.git"/>
 
 <!--
     <framework src="Fabric" type="podspec" spec="~> 1.9" />
