@@ -127,10 +127,8 @@
             <pod name="Firebase/Messaging" spec="4.3.0"/>
             <pod name="Firebase/Performance" spec="3.1.11"/>
             <pod name="Firebase/RemoteConfig" spec="4.4.9"/>
-<!--
-          <pod name="Fabric" spec="1.10.2"/>
-          <pod name="Crashlytics" spec="3.14.0"/>
--->    
+            <pod name="Fabric" spec="1.10.2"/>
+            <pod name="Crashlytics" spec="3.14.0"/>
       </pods>
     </podspec>
   </platform>
