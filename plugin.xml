@@ -109,6 +109,7 @@
     <dependency id="cordova-plugin-cocoapod-support" url="https://github.com/blakgeek/cordova-plugin-cocoapods-support.git"/>
 
 <!--
+Like it has
     <framework src="Fabric" type="podspec" spec="~> 1.9" />
     <framework src="Crashlytics" type="podspec" spec="~> 3.12" />
     <framework src="FirebaseAnalytics" type="podspec" spec="~> 4.2" />
@@ -117,6 +118,17 @@
     <framework src="FirebaseRemoteConfig" type="podspec" spec="~> 4.4.9" />
     <framework src="FirebasePerformance" type="podspec" spec="~> 1.1.3" />
 
+One attempt
+    <framework src="Fabric" type="podspec" spec="~> 1.9.0" />
+    <framework src="Crashlytics" type="podspec" spec="~> 3.12.0" />
+    <framework src="Firebase/Core" type="podspec" spec="5.14.0"/>
+    <framework src="Firebase/Analytics" type="podspec" spec="~> 5.14.0" />
+    <framework src="Firebase/Messaging" type="podspec" spec="~> 5.14.0" />
+    <framework src="Firebase/Auth" type="podspec" spec="~> 5.14.0" />
+    <framework src="Firebase/RemoteConfig" type="podspec" spec="~> 5.14.0" />
+    <framework src="Firebase/Performance" type="podspec" spec="~> 5.14.0" />
+    
+-->    
     <podspec>
         <config>
             <source url="https://cdn.cocoapods.org/"/>
@@ -131,14 +143,5 @@
             <pod name="Crashlytics" spec="3.14.0"/>
       </pods>
     </podspec>
--->    
-    <framework src="Fabric" type="podspec" spec="~> 1.9.0" />
-    <framework src="Crashlytics" type="podspec" spec="~> 3.12.0" />
-    <framework src="Firebase/Core" type="podspec" spec="5.14.0"/>
-    <framework src="Firebase/Analytics" type="podspec" spec="~> 5.14.0" />
-    <framework src="Firebase/Messaging" type="podspec" spec="~> 5.14.0" />
-    <framework src="Firebase/Auth" type="podspec" spec="~> 5.14.0" />
-    <framework src="Firebase/RemoteConfig" type="podspec" spec="~> 5.14.0" />
-    <framework src="Firebase/Performance" type="podspec" spec="~> 5.14.0" />
   </platform>
 </plugin>
