@@ -10,6 +10,8 @@
 @import FirebasePerformance;
 @import FirebaseAuth;
 
+
+
 #if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 @import UserNotifications;
 #endif
@@ -57,8 +59,15 @@ static FirebasePlugin *firebasePlugin;
 }
 
 - (void)getToken:(CDVInvokedUrlCommand *)command {
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:[[FIRInstanceID instanceID] token]];
-    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    [[FIRInstanceID instanceID] instanceIDWithHandler:^(FIRInstanceIDResult * _Nullable result, NSError * _Nullable error) {
+    if (error != nil) {
+    NSLog(@"Error fetching remote instance ID: %@", error);
+    } else {
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:result.token];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+    }
+    }];
+    
 }
 
 - (void)hasPermission:(CDVInvokedUrlCommand *)command {
@@ -148,13 +157,31 @@ static FirebasePlugin *firebasePlugin;
         if (error) {
             NSLog(@"FirebasePlugin - Unable to delete instance");
         } else {
+            
+            [[FIRInstanceID instanceID] instanceIDWithHandler:^(FIRInstanceIDResult * _Nullable result, NSError * _Nullable error) {
+                if (error != nil) {
+                    NSLog(@"Error fetching remote instance ID: %@", error);
+                     CDVPluginResult* result = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"No thermal camera available"];
+                    [self.commandDelegate sendPluginResult:result callbackId:command.callbackId];
+                } else {
+                    if (result.token != nil) {
+                        [self sendToken:result.token];
+                    }
+                    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+                    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+                }
+                }];
+            }
+        
+            /*
+            
             NSString* currentToken = [[FIRInstanceID instanceID] token];
             if (currentToken != nil) {
                 [self sendToken:currentToken];
             }
             CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
-        }
+             }*/
     }];
 }
 
@@ -171,11 +198,20 @@ static FirebasePlugin *firebasePlugin;
 
 - (void)onTokenRefresh:(CDVInvokedUrlCommand *)command {
     self.tokenRefreshCallbackId = command.callbackId;
-    NSString* currentToken = [[FIRInstanceID instanceID] token];
-
-    if (currentToken != nil) {
-        [self sendToken:currentToken];
+    
+    [[FIRInstanceID instanceID] instanceIDWithHandler:^(FIRInstanceIDResult * _Nullable result, NSError * _Nullable error) {
+    if (error != nil) {
+    NSLog(@"Error fetching remote instance ID: %@", error);
+    } else {
+        
+        if (result.token != nil) {
+            [self sendToken:result.token];
+        }
+        CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:result.token];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }
+    }];
+    
 }
 
 - (void)sendNotification:(NSDictionary *)userInfo {
@@ -222,7 +258,8 @@ static FirebasePlugin *firebasePlugin;
      [self.commandDelegate runInBackground:^{
         BOOL enabled = [[command argumentAtIndex:0] boolValue];
 
-        [[FIRAnalyticsConfiguration sharedInstance] setAnalyticsCollectionEnabled:enabled];
+        //[[FIRAnalyticsConfiguration sharedInstance] setAnalyticsCollectionEnabled:enabled];
+         
         CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
      }];
@@ -277,7 +314,7 @@ static FirebasePlugin *firebasePlugin;
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     }];
 }
-/*
+
 //
 // Crashlytics
 //
@@ -301,7 +338,7 @@ static FirebasePlugin *firebasePlugin;
 - (void)forceCrashlytics:(CDVInvokedUrlCommand *)command {
     [[Crashlytics sharedInstance] crash];
 }
-*/
+
 //
 // Remote Config
 //
@@ -388,7 +425,8 @@ static FirebasePlugin *firebasePlugin;
         FIRTrace *trace = (FIRTrace*)[self.traces objectForKey:traceName];
 
         if (trace != nil) {
-            [trace incrementCounterNamed:counterNamed];
+            //TODO: Search for the new method
+            //[trace incrementCounterNamed:counterNamed];
             [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         } else {
             pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Trace not found"];
