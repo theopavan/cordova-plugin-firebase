@@ -106,52 +106,13 @@
     <header-file src="src/ios/FirebasePlugin.h" />
     <source-file src="src/ios/FirebasePlugin.m" />
     
-<!--<dependency id="cordova-plugin-cocoapod-support" url="https://github.com/blakgeek/cordova-plugin-cocoapods-support.git"/>--> 
-
-<!--
-Like it has
-    <framework src="Fabric" type="podspec" spec="~> 1.9" />
-    <framework src="Crashlytics" type="podspec" spec="~> 3.12" />
-    <framework src="FirebaseAnalytics" type="podspec" spec="~> 4.2" />
-    <framework src="FirebaseMessaging" type="podspec" spec="~> 2.2" />
-    <framework src="FirebaseAuth" type="podspec" spec="~> 4.6.1" />
-    <framework src="FirebaseRemoteConfig" type="podspec" spec="~> 4.4.9" />
-    <framework src="FirebasePerformance" type="podspec" spec="~> 1.1.3" />
-
-One attempt
-    <framework src="Fabric" type="podspec" spec="~> 1.9.0" />
-    <framework src="Crashlytics" type="podspec" spec="~> 3.12.0" />
-    <framework src="Firebase/Core" type="podspec" spec="5.14.0"/>
-    <framework src="Firebase/Analytics" type="podspec" spec="~> 5.14.0" />
-    <framework src="Firebase/Messaging" type="podspec" spec="~> 5.14.0" />
-    <framework src="Firebase/Auth" type="podspec" spec="~> 5.14.0" />
-    <framework src="Firebase/RemoteConfig" type="podspec" spec="~> 5.14.0" />
-    <framework src="Firebase/Performance" type="podspec" spec="~> 5.14.0" />
-
-Another attempt
-    <podspec>
-        <config>
-            <source url="https://cdn.cocoapods.org/"/>
-        </config>
-        <pods use-frameworks="true">
-            <pod name="Firebase/Core" spec="6.6.5"/>
-            <pod name="Firebase/Auth" spec="6.5.1"/>
-            <pod name="Firebase/Messaging" spec="4.3.0"/>
-            <pod name="Firebase/Performance" spec="3.1.11"/>
-            <pod name="Firebase/RemoteConfig" spec="4.4.9"/>
-            <pod name="Fabric" spec="1.10.2"/>
-            <pod name="Crashlytics" spec="3.14.0"/>
-      </pods>
-    </podspec>
---> 
-    
-    <framework src="Fabric" type="podspec" spec="~> 1.9" />
-    <framework src="Crashlytics" type="podspec" spec="~> 3.12" />
-    <framework src="FirebaseAnalytics" type="podspec" spec="~> 4.2" />
-    <framework src="FirebaseMessaging" type="podspec" spec="~> 2.2" />
-    <framework src="FirebaseAuth" type="podspec" spec="~> 4.6.1" />
-    <framework src="FirebaseRemoteConfig" type="podspec" spec="~> 2.1.3" />
-    <framework src="FirebasePerformance" type="podspec" spec="~> 1.1.3" />
+    <framework src="Fabric" type="podspec" spec="~> 1.10.2" />
+    <framework src="Crashlytics" type="podspec" spec="~> 3.14.0" />
+    <framework src="FirebaseAnalytics" type="podspec" spec="~> 6.1.6" />
+    <framework src="FirebaseMessaging" type="podspec" spec="~> 4.1.9" />
+    <framework src="FirebaseAuth" type="podspec" spec="~> 6.4.0" />
+    <framework src="FirebaseRemoteConfig" type="podspec" spec="~> 4.4.5" />
+    <framework src="FirebasePerformance" type="podspec" spec="~> 3.1.7" />
     
   </platform>
 </plugin>
