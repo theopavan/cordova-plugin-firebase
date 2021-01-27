@@ -10,9 +10,9 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-//import androidx.core.app.NotificationCompat;
-//import androidx.core.app.NotificationManagerCompat;
-import android.support.v4.app.NotificationCompat;
+import android.os.Build;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import android.util.Log;
 import android.app.Notification;
 import android.text.TextUtils;
@@ -86,29 +86,52 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
     // TODO(developer): Handle FCM messages here.
     // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-    String title;
-    String text;
-    String id;
+    String messageType;
+    String title= null;
+    String text = null;
+    String id = null;
     String sound = null;
     String lights = null;
+    String vibrate = null;
+    String color = null;
+    String icon = null;
+    String channelId = null;
+    String visibility = null;
+    String priority = null;  
+    boolean foregroundNotification = false;
+
     Map<String, String> data = remoteMessage.getData();
     
     if (remoteMessage.getNotification() != null) {
+      messageType = "notification";
+      id = remoteMessage.getMessageId();
+      RemoteMessage.Notification notification = remoteMessage.getNotification();
       title = remoteMessage.getNotification().getTitle();
       text = remoteMessage.getNotification().getBody();
-      id = remoteMessage.getMessageId();
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        channelId = notification.getChannelId();
+      }
+      sound = notification.getSound();
+      color = notification.getColor();
+      icon = notification.getIcon();
     } else {
+      messageType = "data";
+      id = data.get("id");
       title = data.get("title");
       text = data.get("text");
-      id = data.get("id");
       sound = data.get("sound");
       lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
 
       if (TextUtils.isEmpty(text)) {
         text = data.get("body");
       }
+
       if (TextUtils.isEmpty(text)) {
         text = data.get("message");
+      }
+
+      if (data.containsKey("notification_foreground")) {
+        foregroundNotification = true;
       }
     }
 
@@ -134,7 +157,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
     // TODO: Add option to developer to configure if show notification when app on foreground
     if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || (!data.isEmpty())) {
-      boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
+      boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback() || foregroundNotification) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
       Log.d(TAG, "showNotification: " + (showNotification ? "true" : "false"));
       sendNotification(id, title, text, data, showNotification, sound, lights);
     }
@@ -167,7 +190,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         .setPriority(NotificationCompat.PRIORITY_MAX);
 
       // Title
-      if (TextUtils.isEmpty(title) && android.os.Build.VERSION.SDK_INT <= android.os.Build.VERSION_CODES.M) {
+      if (TextUtils.isEmpty(title) && Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
         int stringId = getApplicationInfo().labelRes;
         String appName = stringId == 0 ? getApplicationInfo().nonLocalizedLabel.toString() : getString(stringId);
         notificationBuilder.setContentTitle(appName);
@@ -178,7 +201,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
       if (resID != 0) {
         notificationBuilder.setSmallIcon(resID);
       } else {
-        if (android.os.Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
           resID = getResources().getIdentifier("icon", "mipmap", getPackageName());
           if (resID != 0) {
             notificationBuilder.setSmallIcon(resID);
@@ -219,7 +242,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         } catch (Exception e) { }
       }
 
-      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         int accentID = getResources().getIdentifier("accent", "color", getPackageName());
         Log.d(TAG, "AccentId: " + Integer.toString(accentID));
         notificationBuilder.setColor(getResources().getColor(accentID, null));
@@ -227,7 +250,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
 
       Notification notification = notificationBuilder.build();
 
-      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         int iconID = android.R.id.icon;
         int notiID = getResources().getIdentifier("notification_big", "drawable", getPackageName());
         if (notification.contentView != null) {
@@ -238,7 +261,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
       NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
       // Since android Oreo notification channel is needed.
-      if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         List<NotificationChannel> channels = notificationManager.getNotificationChannels();
 
         boolean channelExists = false;

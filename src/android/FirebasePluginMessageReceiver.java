@@ -1,5 +1,6 @@
 package org.apache.cordova.firebase;
 
+import android.os.Bundle;
 import com.google.firebase.messaging.RemoteMessage;
 
 public abstract class FirebasePluginMessageReceiver {
